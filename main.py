@@ -44,9 +44,12 @@ def get_stats(device_id: int):
     return stats
 
 @app.get("/stats/analysis/")
-def analysis(device_id: int, start_date: date, end_date: date = None):
+def analysis(device_id: int, start_date: date = None, end_date: date = None):
     db = SessionLocal()
-    query = db.query(DeviceStat).filter(DeviceStat.device_id == device_id, DeviceStat.date >= start_date)
+    query = db.query(DeviceStat).filter(DeviceStat.device_id == device_id)
+
+    if start_date:
+        query = query.filter(DeviceStat.date >= start_date)
     if end_date:
         query = query.filter(DeviceStat.date <= end_date)
     
@@ -54,9 +57,14 @@ def analysis(device_id: int, start_date: date, end_date: date = None):
     if not stats:
         raise HTTPException(status_code=404, detail="Статистика не найдена")
     
-    count = len(stats)
-    time_interval = f"{str(start_date)} — {str(end_date)}"
 
+    
+    if start_date and end_date:
+        time_interval = f"{str(start_date)} — {str(end_date)}"
+    else:
+        time_interval = "all_time"
+
+    count = len(stats)
     X = [stat.x for stat in stats]
     min_x = min(X)
     max_x = max(X)
@@ -76,7 +84,8 @@ def analysis(device_id: int, start_date: date, end_date: date = None):
     mid_z = median(Z)
 
 
-    data_time_interval = {
+    data = {
+        "device_id" : device_id,
         "interval" : time_interval,
         "count": count,
         "min_x": min_x,
@@ -94,7 +103,4 @@ def analysis(device_id: int, start_date: date, end_date: date = None):
     }
 
     
-    return {
-            "data_time_interval" : data_time_interval,
-            "data_all_time" : data_all_time
-            }
+    return { "data" : data }
