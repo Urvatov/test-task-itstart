@@ -19,15 +19,25 @@ class DeviceStat(Base):
     z = Column(Float)
     date = Column(Date)
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, unique=True)
+
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
- 
+@app.post("/users/")
+def add_user():
+    pass
+
+
 @app.post("/stats/")
-def create_stat(device_id: int, x: float, y: float, z: float, date : date):
+def add_stats(device_id: int, x: float, y: float, z: float, date : date):
     db = SessionLocal()
     stat = DeviceStat(device_id=device_id, x=x, y=y, z=z, date=date)
     db.add(stat)
@@ -44,7 +54,7 @@ def get_stats(device_id: int):
     return stats
 
 @app.get("/stats/analysis/")
-def analysis(device_id: int, start_date: date = None, end_date: date = None):
+def get_analysis(device_id: int, start_date: date = None, end_date: date = None):
     db = SessionLocal()
     query = db.query(DeviceStat).filter(DeviceStat.device_id == device_id)
 
