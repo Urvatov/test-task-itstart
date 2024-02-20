@@ -18,12 +18,22 @@
 Все отправляемые значения сохраняются в базе данных. 
 
 ### 4. Получение статистики с утройства по его id:
-![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/b3a7ae6a-c3c7-4962-ba1f-83f9cac72ea7)
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/204d08d6-ce49-4b9b-9f8d-967de736e2c1)
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/be2d9ef2-fef2-4751-8f92-08c448d087d8)
 
-### 5. Получение аналитики по устройству по его id:  
+
+
+### 5. Получение анализа показаний устройства по его id:  
 Если выбрать интервал времени, статистика выведется по интервалу. Если не выбирать, то за все время.
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/d828a772-d025-45ad-af5e-f968b7ef7e4a)
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/e4d3d531-731b-4ae9-9b93-cf8beac28265)
+
+
+### 6. Получение анализа показаний устройств по id пользователя:  
+Резуьтат для всех устройств, если не указано id устройства. Либо для каждого устройства отдельно, если указывать.
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/957d8cad-d3ef-43db-8568-00a115b16eae)
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/f8da2c72-433c-46b7-9c46-16c356e7b364)
+
 
 
 
