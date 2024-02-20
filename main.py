@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from datetime import date
 from statistics import median
 from models import User, Device, DeviceStat
+
 app = FastAPI()
 
 Base = declarative_base()
@@ -34,7 +35,7 @@ def add_device(name : str, user_id : int = None):
     db.commit()
     db.close() 
 
-    return {"message" : f"{name} добавлен"}
+    return {"message" : f"Устройство {name} добавлен, пользователь: {user_id}"}
 
 
 @app.post("/stats/")
@@ -47,7 +48,7 @@ def add_stats(device_id: int, x: float, y: float, z: float, date : date):
     return {"message": f"Статистика для устройства {device_id} добавлена"}
 
 @app.get("/stats/{device_id}")
-def get_stats(device_id: int):
+def get_stats_by_device(device_id: int):
     db = SessionLocal()
     stats = db.query(DeviceStat).filter(DeviceStat.device_id == device_id).all()
     if not stats:
@@ -55,7 +56,7 @@ def get_stats(device_id: int):
     return stats
 
 @app.get("/stats/analysis/")
-def get_analysis(device_id: int, start_date: date = None, end_date: date = None):
+def get_analysis_by_device(device_id: int, start_date: date = None, end_date: date = None):
     db = SessionLocal()
     query = db.query(DeviceStat).filter(DeviceStat.device_id == device_id)
 
