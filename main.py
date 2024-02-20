@@ -19,6 +19,11 @@ def add_user(name : str):
 @app.post("/devices/")
 def add_device(name : str, user_id : int = None):
     db = SessionLocal()
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=f"Пользователь {user_id} не найден")
+    
     device = Device(name=name, user_id=user_id)
     db.add(device)
     db.commit()
