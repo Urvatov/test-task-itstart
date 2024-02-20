@@ -1,29 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from sqlalchemy import create_engine, Column, Float, String, Date, Integer
+from sqlalchemy import create_engine, Column, Float, String, Date, Integer, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from datetime import date
 from statistics import median
-
+from models import User, Device, DeviceStat
 app = FastAPI()
 
 Base = declarative_base()
-
-class DeviceStat(Base):
-    __tablename__ = "device_stats"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    device_id = Column(Integer)
-    x = Column(Float)
-    y = Column(Float)
-    z = Column(Float)
-    date = Column(Date)
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, unique=True)
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -32,8 +16,25 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
 
 @app.post("/users/")
-def add_user():
-    pass
+def add_user(name : str):
+    db = SessionLocal()
+    user = User(name=name)
+    db.add(user)
+    db.commit()
+    db.close() 
+
+    return {"message" : f"Пользователь {name} добавлен"}
+
+
+@app.post("/devices/")
+def add_device(name : str, user_id : int = None):
+    db = SessionLocal()
+    device = Device(name=name, user_id=user_id)
+    db.add(device)
+    db.commit()
+    db.close() 
+
+    return {"message" : f"{name} добавлен"}
 
 
 @app.post("/stats/")
