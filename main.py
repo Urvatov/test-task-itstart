@@ -2,54 +2,58 @@ from fastapi import FastAPI, HTTPException
 from datetime import date
 from statistics import median
 from models import User, Device, DeviceStat, SessionLocal
+from pydantic import BaseModel
+from schemas import DeviceInput, UserInput, DeviceStatInput
 
 app = FastAPI()
 
+
 @app.post("/users/")
-def add_user(name : str):
+def add_user(data : UserInput):
     db = SessionLocal()
-    user = User(name=name)
+    user = User(name=data.name)
     db.add(user)
     db.commit()
     db.close() 
 
-    return {"message" : f"Пользователь {name} добавлен"}
+    return {"message" : f"Пользователь {data.name} добавлен"}
 
 
 @app.post("/devices/")
-def add_device(name : str, user_id : int = None):
+def add_device(data : DeviceInput):
     db = SessionLocal()
 
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(User).filter(User.id == data.user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail=f"Пользователь {user_id} не найден")
+        raise HTTPException(status_code=404, detail=f"Пользователь {data.user_id} не найден")
     
-    device = Device(name=name, user_id=user_id)
+    device = Device(name=data.name, user_id=data.user_id)
     db.add(device)
     db.commit()
     db.close() 
 
-    return {"message" : f"Устройство {name} добавлено, пользователь: {user_id}"}
+    return {"message" : f"Устройство {data.name} добавлено, пользователь: {data.user_id}"}
 
 
 @app.post("/stats/")
-def add_stats(device_id: int, x: float, y: float, z: float, date : date):
-    db = SessionLocal()
+def add_stats(data: DeviceStatInput):
+    db = SessionLocal() 
 
-    device = db.query(Device).filter(Device.id == device_id).first()
+    device = db.query(Device).filter(Device.id == data.device_id).first()
     if not device:
-        raise HTTPException(status_code=404, detail=f"Устройство {device_id} не найдено")
+        raise HTTPException(status_code=404, detail=f"Устройство {data.device_id} не найдено")
     
-    stat = DeviceStat(device_id=device_id, x=x, y=y, z=z, date=date)
+    stat = DeviceStat(device_id=data.device_id, x=data.x, y=data.y, z=data.z, date=data.date)
     db.add(stat)
     db.commit()
     db.close() 
-    return {"message": f"Статистика для устройства {device_id} добавлена"}
+    return {"message": f"Статистика для устройства {data.device_id} добавлена"}
 
 @app.get("/stats/{device_id}")
 def get_stats_by_device(device_id: int):
     db = SessionLocal()
     stats = db.query(DeviceStat).filter(DeviceStat.device_id == device_id).all()
+    
     if not stats:
         raise HTTPException(status_code=404, detail=f"Статистика для устройства {device_id} не найдена")
     return stats
@@ -92,7 +96,6 @@ def get_analysis_by_device(device_id: int, start_date: date = None, end_date: da
     sum_z = sum(Z)
     mid_z = median(Z)
 
-
     data = {
         "device_id" : device_id,
         "interval" : time_interval,
@@ -110,9 +113,8 @@ def get_analysis_by_device(device_id: int, start_date: date = None, end_date: da
         "sum_z": sum_z,
         "mid_z": mid_z
     }
-
     
-    return { "data" : data }
+    return data
 
 @app.get("/users/analysis")
 def get_analysis_by_user(user_id: int, device_id: int = None):
@@ -122,14 +124,12 @@ def get_analysis_by_user(user_id: int, device_id: int = None):
         devices = db.query(Device).filter(Device.user_id == user_id, Device.id == device_id).all()
     else:
         devices = db.query(Device).filter(Device.user_id == user_id).all()
-        print(devices)
 
     if not devices:
         raise HTTPException(status_code=404, detail=f"Устройства пользователя {user_id} не найдены")
 
     result = {}
     for device in devices:
-        print(device)
         stats_query = db.query(DeviceStat).filter(DeviceStat.device_id == device.id)
         stats = stats_query.all()
 
