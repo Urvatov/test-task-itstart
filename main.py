@@ -30,6 +30,11 @@ def add_device(name : str, user_id : int = None):
 @app.post("/stats/")
 def add_stats(device_id: int, x: float, y: float, z: float, date : date):
     db = SessionLocal()
+
+    device = db.query(Device).filter(Device.id == device_id).first()
+    if not device:
+        raise HTTPException(status_code=404, detail=f"Устройство {device_id} не найдено")
+    
     stat = DeviceStat(device_id=device_id, x=x, y=y, z=z, date=date)
     db.add(stat)
     db.commit()
@@ -57,8 +62,6 @@ def get_analysis_by_device(device_id: int, start_date: date = None, end_date: da
     stats = query.all()
     if not stats:
         raise HTTPException(status_code=404, detail="Статистика не найдена")
-    
-
     
     if start_date and end_date:
         time_interval = f"{str(start_date)} — {str(end_date)}"
