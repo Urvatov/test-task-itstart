@@ -10,6 +10,7 @@ class DeviceStatInput(BaseModel):
 
 class UserInput(BaseModel):
     name : str
+    
 
 class DeviceInput(BaseModel):
     name : str
