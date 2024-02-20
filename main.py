@@ -108,3 +108,66 @@ def get_analysis_by_device(device_id: int, start_date: date = None, end_date: da
 
     
     return { "data" : data }
+
+@app.get("/users/analysis")
+def get_analysis_by_user(user_id: int, device_id: int = None):
+    db = SessionLocal()
+
+    if device_id:
+        devices = db.query(Device).filter(Device.user_id == user_id, Device.id == device_id).all()
+    else:
+        devices = db.query(Device).filter(Device.user_id == user_id).all()
+        print(devices)
+
+    if not devices:
+        raise HTTPException(status_code=404, detail=f"Устройства пользователя {user_id} не найдены")
+
+    result = {}
+    for device in devices:
+        print(device)
+        stats_query = db.query(DeviceStat).filter(DeviceStat.device_id == device.id)
+        stats = stats_query.all()
+
+        if not stats:
+            continue  
+
+        count = len(stats)
+        X = [stat.x for stat in stats]
+        min_x = min(X)
+        max_x = max(X)
+        sum_x = sum(X)
+        mid_x = median(X)
+
+        Y = [stat.y for stat in stats]
+        min_y = min(Y)
+        max_y = max(Y)
+        sum_y = sum(Y)
+        mid_y = median(Y)
+
+        Z = [stat.z for stat in stats]
+        min_z = min(Z)
+        max_z = max(Z)
+        sum_z = sum(Z)
+        mid_z = median(Z)
+
+        data = {
+            "device_id": device.id,
+            "device_name": device.name,
+            "count": count,
+            "min_x": min_x,
+            "max_x": max_x,
+            "sum_x": sum_x,
+            "mid_x": mid_x,
+            "min_y": min_y,
+            "max_y": max_y,
+            "sum_y": sum_y,
+            "mid_y": mid_y,
+            "min_z": min_z,
+            "max_z": max_z,
+            "sum_z": sum_z,
+            "mid_z": mid_z
+        }
+
+       
+        result[device.id] = data
+    return {"data": result}

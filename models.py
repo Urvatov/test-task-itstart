@@ -16,6 +16,9 @@ class User(Base):
     name = Column(String, unique=True)
     devices = relationship("Device", back_populates="user")
 
+    def __str__(self):
+        return f"user {self.id}: {self.name}"
+
 class Device(Base):
     __tablename__ = "devices"
 
@@ -25,6 +28,9 @@ class Device(Base):
 
     user = relationship("User", back_populates="devices")
     stats = relationship("DeviceStat", back_populates="device")
+
+    def __str__(self):
+        return f"device {self.id}: {self.name}"
 
 
 class DeviceStat(Base):
