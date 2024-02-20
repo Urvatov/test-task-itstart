@@ -1,12 +1,13 @@
 # Тестовое задание Python-разработчик  
 
 Перейдя в /docs, можно проверить работу системы при помощи Swagger Ui.  
-![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/49a3d3c2-2147-4815-9d94-e7edf74f6e5a)
+![306379071-f3232e3f-a5b5-4e61-8527-b19a55698ed3](https://github.com/Urvatov/test-task-itstart/assets/117490456/31269e11-cdff-4fd2-a934-283fb01faf16)
 
 
 ## Доступные функции:  
 ### 1. Добавление пользователя:  
-![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/bee56947-5454-4393-a6e6-e9e612889c03)  
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/557951df-2f31-4da0-a1cf-fe675ebd92d0)
+
 ### 2. Добавление устройства:
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/9726d926-b89d-4e71-80ef-eadaee5de8c6)
 
