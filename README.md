@@ -15,4 +15,17 @@
 ### 3. Добавление статистики с устройства:
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/94ad6aeb-13bd-49a9-b54f-95590c5425cc)
 
+Все отправляемые значения сохраняются в базе данных. 
+
+### 4. Получение статистики с утройства по его id:
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/b3a7ae6a-c3c7-4962-ba1f-83f9cac72ea7)
+
+### 5. Получение аналитики по устройству по его id:  
+Если выбрать интервал времени, статистика выведется по интервалу. Если не выбирать, то за все время.
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/d828a772-d025-45ad-af5e-f968b7ef7e4a)
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/e4d3d531-731b-4ae9-9b93-cf8beac28265)
+
+
+
+
 
