@@ -9,9 +9,6 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base.metadata.create_all(bind=engine)
-
-
 class User(Base):
     __tablename__ = "users"
 
@@ -27,13 +24,19 @@ class Device(Base):
     name = Column(String)
 
     user = relationship("User", back_populates="devices")
+    stats = relationship("DeviceStat", back_populates="device")
+
 
 class DeviceStat(Base):
     __tablename__ = "device_stats"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    device_id = Column(Integer)
+    device_id = Column(Integer, ForeignKey('devices.id'))
     x = Column(Float)
     y = Column(Float)
     z = Column(Float)
     date = Column(Date)
+
+    device = relationship("Device", back_populates="stats")
+
+Base.metadata.create_all(bind=engine)

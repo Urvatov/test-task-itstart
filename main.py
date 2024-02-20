@@ -1,20 +1,9 @@
 from fastapi import FastAPI, HTTPException
-from sqlalchemy import create_engine, Column, Float, String, Date, Integer, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
 from datetime import date
 from statistics import median
-from models import User, Device, DeviceStat
+from models import User, Device, DeviceStat, SessionLocal
 
 app = FastAPI()
-
-Base = declarative_base()
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base.metadata.create_all(bind=engine)
 
 @app.post("/users/")
 def add_user(name : str):
@@ -35,7 +24,7 @@ def add_device(name : str, user_id : int = None):
     db.commit()
     db.close() 
 
-    return {"message" : f"Устройство {name} добавлен, пользователь: {user_id}"}
+    return {"message" : f"Устройство {name} добавлено, пользователь: {user_id}"}
 
 
 @app.post("/stats/")
