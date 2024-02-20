@@ -3,7 +3,7 @@ from locust import HttpUser, task, between
 #locust -f locustfile.py
 
 class TestUser(HttpUser):
-    wait_time = between(1, 3)  # Время ожидания между запросами
+    wait_time = between(1, 3)
 
     @task
     def add_user(self):

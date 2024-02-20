@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from datetime import date
 from statistics import median
 from models import User, Device, DeviceStat, SessionLocal
-from pydantic import BaseModel
 from schemas import DeviceInput, UserInput, DeviceStatInput
 
 app = FastAPI()
