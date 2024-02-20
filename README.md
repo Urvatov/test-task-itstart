@@ -34,6 +34,11 @@
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/957d8cad-d3ef-43db-8568-00a115b16eae)
 ![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/f8da2c72-433c-46b7-9c46-16c356e7b364)
 
+## Нагрузочное тестирование через инструмент locust
+Результаты:
+![изображение](https://github.com/Urvatov/test-task-itstart/assets/117490456/9929d4dc-bafe-45d0-a178-245e17493508)
+
+
 
 
 
